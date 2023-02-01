@@ -22,7 +22,6 @@ body {
   }
 
 .calculator {
-    width: 400px;
     background-color: rgb(159, 157, 157);
     padding: 30px;
 }
@@ -34,10 +33,14 @@ body {
 }
 
 .buttons-grid > button {
-    font-size: 24px;
-    padding: 10px;
+    font-size: 20px;
+    padding: 20px 30px;
 }
 
-.span-2{
+.display{
+    height: 150px;
+}
+
+.grid-span-2{
     grid-column: span 2;
 }
