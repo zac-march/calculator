@@ -17,5 +17,3 @@ function operate(operator, a, b){
             return divide(a, b);
     }
 };
-
-console.log(operate('/', 100, 5))
