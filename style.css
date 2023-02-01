@@ -8,6 +8,10 @@ body {
     color: #333;
 }
 
+* {
+    border-radius: 10px;
+}
+
 .main {
     flex-grow: 1;
     display: flex;
@@ -37,8 +41,11 @@ body {
     padding: 20px 30px;
 }
 
-.display{
-    height: 150px;
+.screen{
+    height: 100px;
+    background-color: lightblue;
+    margin-bottom: 20px;
+    padding: 10px;
 }
 
 .grid-span-2{
