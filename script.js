@@ -10,6 +10,7 @@ let sumParts = {
 buttons = document.querySelector('.buttons-grid')
 screenBottom = document.querySelector('.screen-bottom')
 screenTop = document.querySelector('.screen-top')
+clearButton = document.querySelector('.clear-button')
 
 buttons.addEventListener('click', (e) => {   
     if (e.target.nodeName != 'BUTTON') {return}
@@ -23,8 +24,11 @@ buttons.addEventListener('click', (e) => {
     else if (['/', 'x', '-', '+'].includes(buttonText)){
         addOperator(buttonText)
     }
-    else if (['CLEAR', 'DELETE'].includes(buttonText)){
+    else if (['DELETE'].includes(buttonText)){
         console.log("Is option! " + buttonText)
+    }
+    else if (buttonText == 'CLEAR'){
+        clear();
     }
     else if (buttonText == '='){
         sumParts.b = +currentNumber;
@@ -35,6 +39,17 @@ buttons.addEventListener('click', (e) => {
         sumParts.b = ''   
     }
 })
+
+function clear(){
+    sumParts = {
+        a: '',
+        b: '',
+        operator: ''
+    };
+    currentNumber = '';
+    updateScreenBottom();
+    updateScreenTop();
+}
 
 function updateScreenBottom(){
     screenBottom.textContent = currentNumber;
