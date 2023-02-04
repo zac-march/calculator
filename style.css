@@ -46,6 +46,12 @@ body {
     background-color: lightblue;
     margin-bottom: 20px;
     padding: 10px;
+    font-size: 32px;
+    direction: rtl;
+}
+
+.screen-top{
+    font-size: 24px;
 }
 
 .grid-span-2{
