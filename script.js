@@ -22,7 +22,26 @@ buttons.addEventListener('click', (e) => {
         updateScreenBottom();
     }
     else if (['/', 'x', '-', '+'].includes(buttonText)){
-        addOperator(buttonText)
+        if(sumParts.a != '' && currentNumber != ''){
+            currentNumber = getAnswer()
+            sumParts.a = +currentNumber;
+            sumParts.b = ''
+            updateScreenBottom();
+            addOperator(buttonText)
+        }
+        else if (sumParts.a != ''){
+            addOperator(buttonText)
+            currentNumber = getAnswer()
+            sumParts.a = +currentNumber;
+            sumParts.b = ''
+            updateScreenBottom();
+        }
+        else{
+            addOperator(buttonText)
+            sumParts.a = +currentNumber;
+        }
+        currentNumber = ''
+        updateScreenTop();
     }
     else if (['DELETE'].includes(buttonText)){
         console.log("Is option! " + buttonText)
@@ -31,9 +50,7 @@ buttons.addEventListener('click', (e) => {
         clear();
     }
     else if (buttonText == '='){
-        sumParts.b = +currentNumber;
         currentNumber = getAnswer()
-        console.log(currentNumber)
         updateScreenTop();
         updateScreenBottom();
         sumParts.b = ''   
@@ -65,6 +82,7 @@ function updateScreenTop(){
 }
 
 function getAnswer() {
+    sumParts.b = +currentNumber;
     let ans = operate(sumParts.a, sumParts.operator, sumParts.b);
     console.log(sumParts.a + sumParts.operator + sumParts.b+'='+ans)
     return ans
@@ -75,18 +93,7 @@ function addNumber(number){
 }
 
 function addOperator(operator) {
-    console.log("b = " + sumParts.b)
-    if (sumParts.a != ''){
-        sumParts.b = +currentNumber;
-        currentNumber = getAnswer()
-        updateScreenBottom();
-    }
-    else{ 
-        sumParts.a = +currentNumber;
-        sumParts.operator = operator
-        currentNumber = ''
-    }
-    updateScreenTop();
+    sumParts.operator = operator;
 }
 
 
