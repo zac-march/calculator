@@ -74,10 +74,10 @@ function updateScreenBottom(){
 
 function updateScreenTop(){
     if (sumParts.b == ''){
-        screenTop.textContent = `${sumParts.operator} ${sumParts.a}`;
+        screenTop.textContent = `${sumParts.a} ${sumParts.operator}`;
     }
     else {
-        screenTop.textContent = `= ${sumParts.b} ${sumParts.operator} ${sumParts.a}`;
+        screenTop.textContent = `${sumParts.a} ${sumParts.operator} ${sumParts.b} = `;
     }
 }
 

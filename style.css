@@ -51,7 +51,7 @@ body {
     margin-bottom: 20px;
     padding: 10px;
     font-size: 32px;
-    direction: rtl;
+    text-align: right;
 }
 
 .screen-top{
