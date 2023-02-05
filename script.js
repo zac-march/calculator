@@ -54,34 +54,33 @@ function handleEquals() {
     setCurrentOperand();
 
     if (sum.isValid()) {
-        screenBottom.textContent = getAnswer();
-        if (screenBottom.textContent == 'Math error!'){return}
+        let ans = getAnswer();
+        screenBottom.textContent = ans
+        if (ans == 'Math error!'){return}
         screenTop.textContent = `${sum.a} ${sum.operator} ${sum.b} = `;
-        resetSum();
+        resetSum()
     }
 
 }
 
 function handleOperator(operator) {
-    if (!shouldClearScreen) {
-        setCurrentOperand();
-        if (sum.isValid()) {
-            let answer = getAnswer();
-            if (answer == 'Math error!'){return}
-            sum.a = answer
-            sum.b = null
-            screenBottom.textContent = sum.a
-            screenTop.textContent = `${sum.a} ${sum.operator}`;
-        }
-    }
-
-    addOperator(operator);
- 
-    if (sum.a != null){
+    if (screenBottom.textContent == 'Math error!') {return}
+    if (sum.isValid()) {
+        let answer = getAnswer();
+        if (answer == 'Math error!'){return}
+        sum.a = answer
+        sum.b = null
+        screenBottom.textContent = sum.a
         screenTop.textContent = `${sum.a} ${sum.operator}`;
     }
 
+    if (!shouldClearScreen) { setCurrentOperand();}
+    
+    addOperator(operator);
+    if (sum.a != null){
+        screenTop.textContent = `${sum.a} ${sum.operator}`;
 
+}
 }
 
 function setCurrentOperand() {
