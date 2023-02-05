@@ -1,6 +1,4 @@
 let currentNumber = '';
-let currentOperator;
-let operators = '';
 let sumParts = {
     a: '',
     b: '',
@@ -18,46 +16,56 @@ buttons.addEventListener('click', (e) => {
     let buttonText = e.target.textContent;
 
     if (!isNaN(buttonText) && !isNaN(parseFloat(buttonText)) ){
-        addNumber(buttonText)
-        updateScreenBottom();
+        handleNumber(buttonText)
     }
     else if (['/', 'x', '-', '+'].includes(buttonText)){
-        if(sumParts.a != '' && currentNumber != ''){
-            currentNumber = getAnswer()
-            sumParts.a = +currentNumber;
-            sumParts.b = ''
-            updateScreenBottom();
-            addOperator(buttonText)
-        }
-        else if (sumParts.a != ''){
-            addOperator(buttonText)
-            currentNumber = getAnswer()
-            sumParts.a = +currentNumber;
-            sumParts.b = ''
-            updateScreenBottom();
-        }
-        else{
-            addOperator(buttonText)
-            sumParts.a = +currentNumber;
-        }
-        currentNumber = ''
-        updateScreenTop();
+        handleOperator(buttonText);
+        return
     }
     else if (['DELETE'].includes(buttonText)){
-        console.log("Is option! " + buttonText)
+        handleDelete();
     }
     else if (buttonText == 'CLEAR'){
-        clear();
+        handleClear();
     }
     else if (buttonText == '='){
         currentNumber = getAnswer()
         updateScreenTop();
-        updateScreenBottom();
         sumParts.b = ''   
     }
+    updateScreenBottom();
 })
 
-function clear(){
+function handleOperator(buttonText) {
+    function updateAns(){
+        currentNumber = getAnswer();
+        sumParts.a = +currentNumber;
+        sumParts.b = '';
+    }
+
+    if (sumParts.a != '' && currentNumber != '') {
+        updateAns();
+        addOperator(buttonText);
+    } else if (sumParts.a != '') {
+        addOperator(buttonText);
+        updateAns();
+    } else {
+        addOperator(buttonText);
+        sumParts.a = +currentNumber;
+    }
+    updateScreenBottom();
+    updateScreenTop();
+    currentNumber = ''
+}
+
+function handleDelete(){
+    if (currentNumber.length > 0) {
+        currentNumber = currentNumber.slice(0, currentNumber.length - 1)
+    }
+    updateScreenBottom();
+}
+
+function handleClear(){
     sumParts = {
         a: '',
         b: '',
@@ -88,7 +96,7 @@ function getAnswer() {
     return ans
 }
 
-function addNumber(number){
+function handleNumber(number){
     currentNumber += number;
 }
 
@@ -96,12 +104,13 @@ function addOperator(operator) {
     sumParts.operator = operator;
 }
 
-
-
 function add(a, b){ return a + b;};
 function subtract (a, b){ return a - b;};
 function multiply (a, b){ return a * b;};
-function divide (a, b){ return a / b;};
+function divide (a, b){ 
+    let ans = a == 0 || b == 0 ? 'Math error' : a / b
+    return ans
+}
 
 function operate(a, operator, b){
     switch(operator){
@@ -115,24 +124,3 @@ function operate(a, operator, b){
             return divide(a, b);
     }
 };
-
-// if (sumParts.length == 3){
-//     currentNumber= getAnswer();
-//     sumParts.a = currentNumber
-//     sumParts.operator = operator
-//     updateScreenBottom();
-//     currentNumber = ''
-// }
-// else{
-//     sumParts.operator = operator
-//     currentNumber = ''
-// }
-// updateScreenTop();
-
-
-
-// screenTop.textContent = `= ${currentNumber} ${screenTop.textContent}`
-// sumParts.a = +currentNumber
-// currentNumber = getAnswer();
-// updateScreenBottom();
-// sumParts.a = currentNumber
