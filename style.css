@@ -1,5 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Source Code Pro', monospace;
     display: flex;
     flex-direction: column;
     margin: 0;
@@ -26,8 +27,9 @@ body {
   }
 
 .calculator {
-    background-color: rgb(159, 157, 157);
+    background-color: #dbd7d8;
     padding: 30px;
+    border: 2px solid #333;
 }
 
 .buttons-grid {
@@ -36,22 +38,31 @@ body {
     grid-template-columns: repeat(4, 1fr);
 }
 
-.buttons-grid > button {
+button {
     font-size: 20px;
     padding: 20px 30px;
+    background-color: #65675e;
+    color: white;
+    font-family: inherit;
+
 }
 
 .clear-button {
-    background-color: rgb(255, 150, 168);
+    background-color: #4a7cb7;
+}
+
+.delete-button {
+    background-color: #c35d91;
 }
 
 .screen{
-    height: 100px;
-    background-color: lightblue;
+    height: 70px;
+    background-color: rgb(186, 216, 226);
     margin-bottom: 20px;
     padding: 10px;
     font-size: 32px;
     text-align: right;
+    border: 1px solid #333;
 }
 
 .screen-top{
