@@ -21,29 +21,33 @@ buttons.addEventListener('click', (e) => {
         handleOperator(buttonText);
         return
     }
-    else if (['DELETE'].includes(buttonText)){
+    else if (buttonText == 'DELETE'){
         handleDelete();
     }
     else if (buttonText == 'CLEAR'){
         handleClear();
     }
     else if (buttonText == '='){
-        currentNumber = getAnswer()
-        updateScreenTop();
-        sumParts.b = ''   
+        handleEquals();
     }
-    updateScreenBottom();
 })
 
+function handleEquals() {
+    if (sumParts.a != ''){
+        currentNumber = getAnswer();
+        updateScreenTop();
+        sumParts.a = '';
+        sumParts.b = '';
+        updateScreenBottom();
+        currentNumber = '';
+    }
+}
+
 function handleOperator(buttonText) {
-    function updateAns(){
+    if (sumParts.a != '' && currentNumber != '') {
         currentNumber = getAnswer();
         sumParts.a = +currentNumber;
         sumParts.b = '';
-    }
-
-    if (sumParts.a != '' && currentNumber != '') {
-        updateAns();
         addOperator(buttonText);
     } else if (sumParts.a != '') {
         addOperator(buttonText);
@@ -51,6 +55,7 @@ function handleOperator(buttonText) {
         addOperator(buttonText);
         sumParts.a = +currentNumber;
     }
+    
     updateScreenBottom();
     updateScreenTop();
     currentNumber = ''
@@ -75,7 +80,7 @@ function handleClear(){
 }
 
 function updateScreenBottom(){
-    if (currentNumber != ''){
+    if (!(currentNumber === '')){
         screenBottom.textContent = currentNumber;
     }
 }
@@ -91,12 +96,20 @@ function updateScreenTop(){
 }
 
 function getAnswer() {
+    if (currentNumber == ''){
+        currentNumber = '0'
+    }
     sumParts.b = +currentNumber;
+    if (sumParts.operator === '/' && (sumParts.b == 0 || sumParts.a == 0)){
+        handleClear();
+        return 'Math error!'
+    }
     return operate();
 }
 
 function handleNumber(number){
     currentNumber += number;
+    updateScreenBottom();
 }
 
 function addOperator(operator) {
@@ -106,10 +119,7 @@ function addOperator(operator) {
 function add(a, b){ return a + b;};
 function subtract (a, b){ return a - b;};
 function multiply (a, b){ return a * b;};
-function divide (a, b){ 
-    let ans = a == 0 || b == 0 ? 'Math error' : a / b
-    return ans
-}
+function divide (a, b){ return a / b;};
 
 function operate(){
     const {a, operator, b} = sumParts;
