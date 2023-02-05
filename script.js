@@ -1,9 +1,13 @@
-let currentNumber = '';
-let sumParts = {
-    a: '',
-    b: '',
-    operator: ''
+let sum = {
+    a: null,
+    b: null,
+    operator: '',
+    isValid: function() {
+        return (this.a != null && this.b != null && this.operator != null)
+    }
 };
+
+let shouldClearScreen = false;
 
 buttons = document.querySelector('.buttons-grid')
 screenBottom = document.querySelector('.screen-bottom')
@@ -15,7 +19,10 @@ buttons.addEventListener('click', (e) => {
     let buttonText = e.target.textContent;
 
     if (!isNaN(buttonText) && !isNaN(parseFloat(buttonText)) ){
-        handleNumber(buttonText)
+        appendNumber(buttonText)
+    }
+    else if (buttonText == '.'){
+        handlePoint();
     }
     else if (['/', 'x', '-', '+'].includes(buttonText)){
         handleOperator(buttonText);
@@ -28,109 +35,120 @@ buttons.addEventListener('click', (e) => {
         handleClear();
     }
     else if (buttonText == '='){
-        handleEquals();
+        handleEquals(sum);
     }
 })
 
-function handleEquals() {
-    if (sumParts.a != ''){
-        currentNumber = getAnswer();
-        updateScreenTop();
-        sumParts.a = '';
-        sumParts.b = '';
-        updateScreenBottom();
-        currentNumber = '';
-    }
+function handlePoint(){
+    screenBottomText = String(screenBottom.textContent)
+
+    if (screenBottomText.includes('.')){return}
+    if (screenBottomText = '') {screenBottom.textContent = '0'}
+    appendNumber('.')
+
 }
 
-function handleOperator(buttonText) {
-    if (sumParts.a != '' && currentNumber != '') {
-        currentNumber = getAnswer();
-        sumParts.a = +currentNumber;
-        sumParts.b = '';
-        addOperator(buttonText);
-    } else if (sumParts.a != '') {
-        addOperator(buttonText);
-    } else {
-        addOperator(buttonText);
-        sumParts.a = +currentNumber;
+function handleEquals() {
+    if (shouldClearScreen) {return}
+
+    setCurrentOperand();
+
+    if (sum.isValid()) {
+        screenBottom.textContent = getAnswer();
+        if (screenBottom.textContent == 'Math error!'){return}
+        screenTop.textContent = `${sum.a} ${sum.operator} ${sum.b} = `;
+        resetSum();
     }
-    
-    updateScreenBottom();
-    updateScreenTop();
-    currentNumber = ''
+
+}
+
+function handleOperator(operator) {
+    if (!shouldClearScreen) {
+        setCurrentOperand();
+        if (sum.isValid()) {
+            let answer = getAnswer();
+            if (answer == 'Math error!'){return}
+            sum.a = answer
+            sum.b = null
+            screenBottom.textContent = sum.a
+            screenTop.textContent = `${sum.a} ${sum.operator}`;
+        }
+    }
+
+    addOperator(operator);
+ 
+    if (sum.a != null){
+        screenTop.textContent = `${sum.a} ${sum.operator}`;
+    }
+
+
+}
+
+function setCurrentOperand() {
+    if (+screenBottom.textContent != NaN) {
+        if (sum.a === null) {
+            sum.a = +screenBottom.textContent;
+        }
+        else {
+            sum.b = +screenBottom.textContent;
+        }
+    }
+    shouldClearScreen = true;
 }
 
 function handleDelete(){
-    if (currentNumber.length > 0) {
-        currentNumber = currentNumber.slice(0, currentNumber.length - 1)
+    let currentOperand = String(screenBottom.textContent)
+    if (currentOperand.length > 0) {
+        screenBottom.textContent = currentOperand.slice(0, currentOperand.length - 1)
     }
-    updateScreenBottom();
 }
 
 function handleClear(){
-    sumParts = {
-        a: '',
-        b: '',
-        operator: ''
-    };
-    currentNumber = '';
-    updateScreenBottom();
-    updateScreenTop();
+    resetSum();
+    screenBottom.textContent = ''
+    screenTop.textContent = ''
 }
 
-function updateScreenBottom(){
-    if (!(currentNumber === '')){
-        screenBottom.textContent = currentNumber;
-    }
-}
-
-function updateScreenTop(){
-    const {a, operator, b} = sumParts;
-    if (sumParts.b == ''){
-        screenTop.textContent = `${a} ${operator}`;
-    }
-    else {
-        screenTop.textContent = `${a} ${operator} ${b} = `;
-    }
+function resetSum() {
+    sum.a = null;
+    sum.b = null;
+    sum.operator = '';
+    shouldClearScreen = true;
 }
 
 function getAnswer() {
-    if (currentNumber == ''){
-        currentNumber = '0'
-    }
-    sumParts.b = +currentNumber;
-    if (sumParts.operator === '/' && (sumParts.b == 0 || sumParts.a == 0)){
+    if (sum.operator === '/' && (sum.b == 0 || sum.a == 0)){
+        shouldClearScreen = true;
         handleClear();
+        screenBottom.textContent = 'Math error!'
         return 'Math error!'
     }
     return operate();
 }
 
-function handleNumber(number){
-    currentNumber += number;
-    updateScreenBottom();
+function appendNumber(number){
+    if (shouldClearScreen){
+        screenBottom.textContent = ''
+        shouldClearScreen = false;
+    }
+
+    screenBottom.textContent += number
 }
 
 function addOperator(operator) {
-    sumParts.operator = operator;
+    sum.operator = operator;
 }
 
-function add(a, b){ return a + b;};
-function subtract (a, b){ return a - b;};
-function multiply (a, b){ return a * b;};
-function divide (a, b){ return a / b;};
-
 function operate(){
-    const {a, operator, b} = sumParts;
+    const {a, operator, b} = sum;
     switch(operator){
         case '+':
-           return add(a, b);
+           return a + b;
         case '-':
-            return subtract(a, b);
+            return a - b;
         case 'x':
-            return multiply(a, b);
+            return a * b;
         case '/':
-            return divide(a, b);
+            return a / b;
     }
 };
