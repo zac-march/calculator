@@ -8,7 +8,6 @@ let sumParts = {
 buttons = document.querySelector('.buttons-grid')
 screenBottom = document.querySelector('.screen-bottom')
 screenTop = document.querySelector('.screen-top')
-clearButton = document.querySelector('.clear-button')
 
 buttons.addEventListener('click', (e) => {   
     if (e.target.nodeName != 'BUTTON') {return}
@@ -48,7 +47,6 @@ function handleOperator(buttonText) {
         addOperator(buttonText);
     } else if (sumParts.a != '') {
         addOperator(buttonText);
-        updateAns();
     } else {
         addOperator(buttonText);
         sumParts.a = +currentNumber;
@@ -77,23 +75,24 @@ function handleClear(){
 }
 
 function updateScreenBottom(){
-    screenBottom.textContent = currentNumber;
+    if (currentNumber != ''){
+        screenBottom.textContent = currentNumber;
+    }
 }
 
 function updateScreenTop(){
+    const {a, operator, b} = sumParts;
     if (sumParts.b == ''){
-        screenTop.textContent = `${sumParts.a} ${sumParts.operator}`;
+        screenTop.textContent = `${a} ${operator}`;
     }
     else {
-        screenTop.textContent = `${sumParts.a} ${sumParts.operator} ${sumParts.b} = `;
+        screenTop.textContent = `${a} ${operator} ${b} = `;
     }
 }
 
 function getAnswer() {
     sumParts.b = +currentNumber;
-    let ans = operate(sumParts.a, sumParts.operator, sumParts.b);
-    console.log(sumParts.a + sumParts.operator + sumParts.b+'='+ans)
-    return ans
+    return operate();
 }
 
 function handleNumber(number){
@@ -112,7 +111,8 @@ function divide (a, b){
     return ans
 }
 
-function operate(a, operator, b){
+function operate(){
+    const {a, operator, b} = sumParts;
     switch(operator){
         case '+':
            return add(a, b);
