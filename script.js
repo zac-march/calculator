@@ -122,7 +122,7 @@ function getAnswer() {
         screenBottom.textContent = 'Math error!'
         return 'Math error!'
     }
-    return operate();
+    return Math.round(operate() * 100000000) / 100000000
 }
 
 function appendNumber(number){
@@ -130,8 +130,10 @@ function appendNumber(number){
         screenBottom.textContent = ''
         shouldClearScreen = false;
     }
-
-    screenBottom.textContent += number
+    if (screenBottom.textContent.length < 16){
+        screenBottom.textContent += number
+    }
+    
 }
 
 function addOperator(operator) {
