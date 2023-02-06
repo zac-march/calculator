@@ -65,6 +65,9 @@ function handleEquals() {
 
 function handleOperator(operator) {
     if (screenBottom.textContent == 'Math error!') {return}
+    
+    if (!shouldClearScreen) { setCurrentOperand();}
+
     if (sum.isValid()) {
         let answer = getAnswer();
         if (answer == 'Math error!'){return}
@@ -74,7 +77,6 @@ function handleOperator(operator) {
         screenTop.textContent = `${sum.a} ${sum.operator}`;
     }
 
-    if (!shouldClearScreen) { setCurrentOperand();}
     
     addOperator(operator);
     if (sum.a != null){
